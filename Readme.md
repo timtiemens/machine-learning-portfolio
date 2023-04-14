@@ -2,12 +2,19 @@
 # Machine Learning Porfolio - Tim Tiemens
 
 
+<center><img src="docs/images/nnet.svg" alt="SVG neural net"
+     width="240" height="160"/></center>
+
 I am an experienced "traditional" software engineer switching to a career as a Machine Learning Engineer.
+
+The pieces of my Machine Learning experiences are already quite scattered, so here is a place that brings them all together in one place.
+
 
 
 Table of contents
 
  * [External Links](#externallinks)
+ * [Posts](#posts)
  * [Courses and Certifications](#coursesandcertifications)
 
 
@@ -21,6 +28,11 @@ Table of contents
  * [ml-style-transfer](https://github.com/timtiemens/ml-style-transfer) Implementation of Neural Style Transfer that allows easy hyperparameter experimentation.
  * [ml-style-transfer-samples](https://github.com/timtiemens/ml-style-transfer-samples) Some interesting outcomes from experiments with different styles, etc.
 
+## Posts
+
+ * [Kaggle, JSON, Python and pandas](http://tiemensfamily.com/timoncs/2023/03/17/kaggle-json-python-and-pandas/)
+ * [Aha!](http://tiemensfamily.com/timoncs/2023/04/08/read-do-aha/)
+ 
 
 ## Courses and Certifications:
 
