@@ -2,8 +2,10 @@
 # Machine Learning Porfolio - Tim Tiemens
 
 
-<center><img src="docs/images/nnet.svg" alt="SVG neural net"
-     width="240" height="160"/></center>
+<p align="center">
+   <img src="docs/images/nnet.svg" alt="SVG neural net"
+   	  width="240" height="160"/>
+</p>
 
 I am an experienced "traditional" software engineer switching to a career as a Machine Learning Engineer.
 
