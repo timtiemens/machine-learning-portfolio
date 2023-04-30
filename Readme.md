@@ -15,20 +15,25 @@ The pieces of my Machine Learning experiences are already quite scattered, so he
 
 Table of contents
 
- * [External Links](#externallinks)
+ * [Original Projects](#original-projects)
+ * [My External Links](#my-external-links)
  * [Posts](#posts)
- * [Courses and Certifications](#coursesandcertifications)
+ * [Courses and Certifications](#courses-and-certifications)
 
 
 ----
 
+## Original Projects
 
-## External Links
-
-#### [My LinkedIn profile](https://www.linkedin.com/in/tim-tiemens-61a6957/)
-#### [My GitHub profile](https://github.com/timtiemens)
  * [ml-style-transfer](https://github.com/timtiemens/ml-style-transfer) Implementation of Neural Style Transfer that allows easy hyperparameter experimentation.
- * [ml-style-transfer-samples](https://github.com/timtiemens/ml-style-transfer-samples) Some interesting outcomes from experiments with different styles, etc.
+   * [ml-style-transfer-samples](https://github.com/timtiemens/ml-style-transfer-samples) Some interesting outcomes from experiments with different styles, etc.
+ 
+
+## My External Links
+
+ * [LinkedIn](https://www.linkedin.com/in/tim-tiemens-61a6957/)
+ * [GitHub](https://github.com/timtiemens)
+ * [Blog](http://tiemensfamily.com/timoncs)
 
 ## Posts
 
@@ -36,7 +41,7 @@ Table of contents
  * [Aha!](http://tiemensfamily.com/timoncs/2023/04/08/read-do-aha/)
  
 
-## Courses and Certifications:
+## Courses and Certifications
 
 
 #### &#9989; Machine Learning Specialization (2023 Feb) [[Specialization home page](https://www.coursera.org/specializations/machine-learning-introduction)]  [[Certificate](https://coursera.org/share/80f01680f536f1f6db088ba5bf3fd7b4)]
