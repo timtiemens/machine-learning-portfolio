@@ -65,11 +65,11 @@ Table of contents
  [[Course home page](https://www.coursera.org/learn/neural-networks-deep-learning)]
  [[Certificate](https://coursera.org/share/b71eba6b242198b6f111e57081cc972b)]
 
-* &#10146; Improving Deep Neural Networks: Hyperparameter Tuning, Regularization and Optimization
+* &#9989; Improving Deep Neural Networks: Hyperparameter Tuning, Regularization and Optimization
  [[Course home page](https://www.coursera.org/learn/deep-neural-network)]
- [Certificate TBD]
+ [Certificate](https://www.coursera.org/account/accomplishments/certificate/P2GCRNZBYZ2B)
 
-* Structuring Machine Learning Projects
+* &#10146; Structuring Machine Learning Projects
  [[Course home page](https://www.coursera.org/learn/machine-learning-projects)]
  [Certificate TBD]
 
