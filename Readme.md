@@ -69,15 +69,15 @@ Table of contents
  [[Course home page](https://www.coursera.org/learn/deep-neural-network)]
  [[Certificate](https://www.coursera.org/account/accomplishments/certificate/P2GCRNZBYZ2B)]
 
-* &#10146; Structuring Machine Learning Projects
+* &#9989; Structuring Machine Learning Projects
  [[Course home page](https://www.coursera.org/learn/machine-learning-projects)]
- [Certificate TBD]
+ [[Certificate](https://www.coursera.org/account/accomplishments/certificate/LLL834Q3YWNU)]
 
 * &#9989; Convolutional Neural Networks
  [[Course home page](https://www.coursera.org/learn/convolutional-neural-networks)]
  [[Certificate](https://coursera.org/share/32215c9bb3c4ba021d77387222afbe9f)]
 
-* Sequence Models
+* &#10146; Sequence Models
  [[Course home page](https://www.coursera.org/learn/nlp-sequence-models)]
  [Certificate TBD]
 
