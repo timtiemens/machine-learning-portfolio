@@ -17,21 +17,22 @@ class CellValue(Enum):
         """So Scikit learn can interpret
         
         """
-        if self.value == EMPTY:
+        if self.value == 1:
             return 0.0
-        elif self.value == X:
+        elif self.value == 2:
             return 1.0
-        elif self.value == O:
+        elif self.value == 3:
             return 2.0
     
     def __str__(self):
-        if self.value == EMPTY:
+        if self.value == 1:
             return '_'
-        elif self.value == X:
+        elif self.value == 2:
             return 'x'
-        elif self.value == O:
+        elif self.value == 3:
             return 'o'
         else:
+            print(f" CellValue.value={self.value} failed")
             return '?'
 
 class Board:
@@ -90,9 +91,9 @@ class Board:
         return [ self.get_opposite_index(r), self.get_opposite_index(c) ]
 
     def compare_moves(self, rowcol_one: list[int], rowcol_two: list[int]) -> bool:
-        if not instance(rowcol_one, list):
+        if not isinstance(rowcol_one, list):
             raise Exception("rowcol_one must be an array")
-        if not instance(rowcol_two, list):
+        if not isinstance(rowcol_two, list):
             raise Exception("rowcol_two must be an array")
         if len(rowcol_one) != len(rowcol_two):
             raise Exception(f"lengths must be the same {len(rowcol_one)} and {len(rowcol_two)}")
@@ -100,14 +101,14 @@ class Board:
             if (v1 != v2):
                 return False
         return True
-    def find_matching_move(find_row_column: list[int], list_row_columns: list[int]) -> bool:
-        if not instance(find_row_column, list):
+    def find_matching_move(self, find_row_column: list[int], list_row_columns: list[int]) -> bool:
+        if not isinstance(find_row_column, list):
             raise Exception("find_row_column must be an array")
-        if not instance(list_row_columns, list):
+        if not isinstance(list_row_columns, list):
             raise Exception("list_row_columns must be an array")
         for i in range(len(list_row_columns)):
             target = list_row_columns[i]
-            if (self.compare_moves(find_row_columns, target)):
+            if (self.compare_moves(find_row_column, target)):
                 return True
         return False
 
@@ -210,7 +211,7 @@ class Board:
     sides = [ [0,1], [1,0], [1,2], [2,1] ]
 
     def find_first_empty_side(self):
-        return self.find_first_empty(sides)
+        return self.find_first_empty(Board.sides)
 
     def find_first_empty(self, moves):
         rtn = None
@@ -221,13 +222,18 @@ class Board:
         return rtn
 
     def find_opposite_corner_move(self, player):
+        print(f" enter find_opposite_corner_move  player={player}  type={type(player)}")
         self.check_player_throw(player)
         rtn = None
         for move in Board.corners:
+            print(f"find_opp  move={move}")
             if self.get_cell_rowcol(move[0], move[1]) == player:
+                print(f"  matched player={player} at {move}")
                 opposite = self.get_opposite_rowcol(move)
+                print(f"  opposite is_empty {opposite} is {self.is_cell_empty(opposite[0], opposite[1])}")
                 if self.is_cell_empty(opposite[0], opposite[1]):
                     rtn = [ opposite[0], opposite[1] ]
+        print(f" exit find_opposite rtn={rtn}")
         return rtn
 
     def count_empty(self):
