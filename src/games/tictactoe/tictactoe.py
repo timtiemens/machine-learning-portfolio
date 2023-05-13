@@ -597,13 +597,173 @@ def write_all_games(all_games, outfile):
     for line in listlines:
         outfile.write(line + "\n")
 
+        
+        
+class NineSymmetry():
+    class Transform():
+        def transform(self, ninein: list[int], nineout: list[int]):
+            raise Exception("subclass must implement this")
+        def get_name(self):
+            raise Exception("subclass must implement this")
+
+    class IndexFlip(Transform):
+        def __init__(self, namein: str, nineout: list[int], ninein: list[int] = [0,1,2,3,4,5,6,7,8]):
+            self.name = namein
+            self.index_in = ninein
+            self.index_out = nineout
+            if len(self.index_in) != 9:
+                raise Exception(f"In {namein} Length must be 9, instead was {len(self.index_in)}")
+            if len(self.index_out) != 9:
+                raise Exception(f"Out {namein} Length must be 9, instead was {len(self.index_out)}")
+            for i in  range(9):
+                if not i in self.index_in:
+                    raise Exception(f"In {namein} Symmtetry missing index {i}")
+                if not i in self.index_out:
+                    raise Exception(f"Out {namein} Symmetry missing index {i}")
+
+            #print(f"Created indexflip")
+            
+        def __str__(self):
+            #return f"IF.len={len(self.index_out)}  {','.join(self.index_out)} "
+            return "[" + " ".join([str(i) for i in self.index_out]) + "]"
+                
+        def transform(self, ninein: list[int], nineout: list[int]):
+            if id(ninein) == id(nineout):
+                raise Exception("ERROR indexflip: in == out will not end well.")
+            
+            for i in range(len(self.index_in)):
+                source = self.index_in[i]
+                target = self.index_out[i]
+                nineout[target] = ninein[source]
+        def get_name(self):
+            return self.name
+
+        
+    class TransformChain(Transform):
+        def __init__(self, first, second = None):
+#                 first: Transform,   # fails "name 'Transform'" not defined
+#                 second: NineSymmetry.Transform = None): # fails  "name 'NineSymmetry"
+            if not isinstance(first, NineSymmetry.Transform):
+                raise Exception("first must be a Transform")
+            self.transform_list = [ first ]
+            #print(f"Added {first.get_name()} to TransformChain")
+            if second:
+                if not isinstance(second, NineSymmetry.Transform):
+                    raise Exception("second must be a Transform")            
+                self.transform_list.append(second)
+                #print(f"Added {second.get_name()} to TransformChain")                
     
+        def transform(self, ninein: list[int], nineout: list[int]):
+            if id(ninein) == id(nineout):
+                raise Exception("ERROR transformchain: in == out will not end well.")
+
+            input = ninein.copy()  # just for extra safety
+            output = nineout
+            # note: cannot make a copy of nineout, since that is the actual output
+            for transform in self.transform_list:
+                #print(f" Running transform {transform.get_name()} {transform}")
+                transform.transform(input, output)
+                input = output.copy()     # INCORRECT: output
+
+        def get_name(self):
+            return "TODO"
+                
+
+    def __init__(self):
+        self.sym_horizontal = NineSymmetry.IndexFlip("hor", [2,1,0, 5,4,3, 8,7,6])
+        self.sym_vertical   = NineSymmetry.IndexFlip("ver", [6,7,8, 3,4,5, 0,1,2])
+        self.sym_lr_diag    = NineSymmetry.IndexFlip("lrd", [8,5,2, 7,4,1, 6,3,0])
+        self.sym_rl_diag    = NineSymmetry.IndexFlip("rld", [0,3,6, 1,4,7, 2,5,8])
+        #self.sym_err    = NineSymmetry.IndexFlip("err", [0,3,6, 1,4,7, 2,5,8])   
+        self.tc_horizontal  = NineSymmetry.TransformChain(self.sym_horizontal)
+        self.tc_vertical    = NineSymmetry.TransformChain(self.sym_vertical)
+        self.tc_lrdiag      = NineSymmetry.TransformChain(self.sym_lr_diag)
+        self.tc_rldiag      = NineSymmetry.TransformChain(self.sym_rl_diag)
+        self.tc_hor_vert    = NineSymmetry.TransformChain(self.tc_horizontal,
+                                                          self.tc_vertical)
+        self.tc_vert_hor    = NineSymmetry.TransformChain(self.tc_vertical,
+                                                          self.tc_horizontal)
+        self.tc_hor_lrd     = NineSymmetry.TransformChain(self.tc_horizontal,
+                                                          self.tc_lrdiag)
+        self.tc_vert_lrd    = NineSymmetry.TransformChain(self.tc_vertical,
+                                                          self.tc_lrdiag)
+        self.all_index_flip = [
+            self.sym_horizontal,
+            self.sym_vertical,
+            self.sym_lr_diag,
+            self.sym_rl_diag]
+            
+        self.all_transforms = [
+            self.sym_horizontal,
+            self.sym_vertical,
+            self.sym_lr_diag,
+            self.sym_rl_diag,
+            self.tc_horizontal,
+            self.tc_vertical,
+            self.tc_lrdiag,
+            self.tc_rldiag,
+            self.tc_hor_vert,
+            self.tc_vert_hor,
+            self.tc_hor_lrd,
+            self.tc_vert_lrd
+        ]
+    def compute_all_unique(self):
+        input = [0,1,2,3,4,5,6,7,8]
+        retOutput2Transform = dict()
+        for transform in self.all_index_flip:
+            outputstring = self.compute_output_string(input, transform)
+            if not outputstring in retOutput2Transform:
+                #print(f"UNIQUE: Adding {transform.get_name()} {outputstring}")
+                retOutput2Transform[outputstring] = transform
+        for first in self.all_transforms:
+            for second in self.all_transforms:
+                transform = NineSymmetry.TransformChain(first, second)
+                outputstring = self.compute_output_string(input, transform)
+                if not outputstring in retOutput2Transform:
+                    #print(f"UNIQUE: Adding compound {first.get_name()} {second.get_name()} {outputstring}")
+                    retOutput2Transform[outputstring] = transform
+                else:
+                    #print(f"UNIQUE: rejected duplicate {outputstring}")
+                    pass
+
+        print(f"Len(unique) = {len(retOutput2Transform.keys())}")
+        return retOutput2Transform
+    def compute_output_string(self, input, transformer):
+        output = input.copy()
+        transformer.transform(input, output)
+        ret = "[" + " ".join([str(i) for i in output]) + "]"
+        return ret
+    
+def create_all_symmetry(nineint: list):
+    ret = []
+    nine_symmetry = NineSymmetry()
+    print(f"HI")
+    
+    return ret
+
+def remove_all_duplicates(infilename, outfilename):
+    """
+    Read infilename.csv, ignore the header, read all lines into LIST.
+    while len(LIST) > 0:
+       line = remove 1st element
+       add line to KEEP
+        # i.e. compute all rotations, flips, etc
+       for each equalnine = create_all_symmetries(line): 
+           if equalnine is in LIST:
+               remove equalnin from LIST
+    """
+    return None
+
+       
 if __name__ == '__main__':
     if False:
         run_game()
-    if True:
+    if False:
         all_games = create_all_games()
         
         with open("ttt-endgame.csv", "w") as outfile:
             write_all_games(all_games, outfile)
+    if True:
+        create_all_symmetry(None)
+        
             
