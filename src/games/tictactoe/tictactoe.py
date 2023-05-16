@@ -600,13 +600,13 @@ def write_all_games(all_games, outfile):
         
         
 class NineSymmetry():
-    class Transform():
+    class Transformer():
         def transform(self, ninein: list[int], nineout: list[int]):
             raise Exception("subclass must implement this")
         def get_name(self):
             raise Exception("subclass must implement this")
 
-    class IndexFlip(Transform):
+    class IndexFlip(Transformer):
         def __init__(self, namein: str, nineout: list[int], ninein: list[int] = [0,1,2,3,4,5,6,7,8]):
             self.name = namein
             self.index_in = ninein
@@ -639,16 +639,22 @@ class NineSymmetry():
             return self.name
 
         
-    class TransformChain(Transform):
+    class TransformChain(Transformer):
         def __init__(self, first, second = None):
-#                 first: Transform,   # fails "name 'Transform'" not defined
-#                 second: NineSymmetry.Transform = None): # fails  "name 'NineSymmetry"
-            if not isinstance(first, NineSymmetry.Transform):
+#                 first: Transformer,   # fails "name 'Transform'" not defined
+#                 second: NineSymmetry.Transformer = None): # fails  "name 'NineSymmetry"
+            """
+            The above type hints are an awesome example of why Python is really
+            not viable as a prime-time language.  It is hilarious that the name(s) that
+            fail in the arguments of __init__ work just fine for isinstance().
+            Also: the "class(extends)" is just "Transformer", not NineSymmetry.Transformer
+            """
+            if not isinstance(first, NineSymmetry.Transformer):
                 raise Exception("first must be a Transform")
             self.transform_list = [ first ]
             #print(f"Added {first.get_name()} to TransformChain")
             if second:
-                if not isinstance(second, NineSymmetry.Transform):
+                if not isinstance(second, NineSymmetry.Transformer):
                     raise Exception("second must be a Transform")            
                 self.transform_list.append(second)
                 #print(f"Added {second.get_name()} to TransformChain")                
@@ -666,7 +672,9 @@ class NineSymmetry():
                 input = output.copy()     # INCORRECT: output
 
         def get_name(self):
-            return "TODO"
+            ret = [transform.get_name() for transform in self.transform_list]
+            
+            return "_".join(ret)
                 
 
     def __init__(self):
@@ -707,18 +715,22 @@ class NineSymmetry():
             self.tc_hor_lrd,
             self.tc_vert_lrd
         ]
+
     def compute_all_unique(self):
+        """
+        Return dictionary  string -> Transformer
+        """
         input = [0,1,2,3,4,5,6,7,8]
         retOutput2Transform = dict()
         for transform in self.all_index_flip:
-            outputstring = self.compute_output_string(input, transform)
+            outputstring = self.compute_output_string_transformer(input, transform)
             if not outputstring in retOutput2Transform:
                 #print(f"UNIQUE: Adding {transform.get_name()} {outputstring}")
                 retOutput2Transform[outputstring] = transform
         for first in self.all_transforms:
             for second in self.all_transforms:
                 transform = NineSymmetry.TransformChain(first, second)
-                outputstring = self.compute_output_string(input, transform)
+                outputstring = self.compute_output_string_transformer(input, transform)
                 if not outputstring in retOutput2Transform:
                     #print(f"UNIQUE: Adding compound {first.get_name()} {second.get_name()} {outputstring}")
                     retOutput2Transform[outputstring] = transform
@@ -726,13 +738,26 @@ class NineSymmetry():
                     #print(f"UNIQUE: rejected duplicate {outputstring}")
                     pass
 
-        print(f"Len(unique) = {len(retOutput2Transform.keys())}")
+        #print(f"Len(unique) = {len(retOutput2Transform.keys())}")
         return retOutput2Transform
-    def compute_output_string(self, input, transformer):
+
+    def compute_output_string_transformer(self, input, transformer):
         output = input.copy()
         transformer.transform(input, output)
-        ret = "[" + " ".join([str(i) for i in output]) + "]"
+        return self.compute_output_string(output)
+
+    def compute_output_string(self, input):
+        ret = "[" + " ".join([str(i) for i in input]) + "]"
         return ret
+
+    def compute_all_unique_not_identity(self):
+        ret = self.compute_all_unique()
+        identity = self.compute_output_string([0,1,2,3,4,5,6,7,8])
+        removed = ret.pop(identity, None)
+        if removed != None:
+            return ret
+        else:
+            raise Exception(f"programmer error identity={identity}")
     
 def create_all_symmetry(nineint: list):
     ret = []
@@ -752,6 +777,81 @@ def remove_all_duplicates(infilename, outfilename):
            if equalnine is in LIST:
                remove equalnin from LIST
     """
+    def cvt_line_to_key(line: str) -> str:
+        ret = line.split(",")
+        ret.pop()
+        return ",".join(ret)
+
+    def cvt_ninearray_to_key(ninearray: list[int]) -> str:
+        return ",".join(ninearray)
+    
+    def cvt_to_ninearray(key: str) -> list[int]:
+        """
+        key is "0","1",...,"8"   i.e. comma-separated
+        """
+        ret =  key.split(",")
+        return ret
+
+    def generate_symmetric_keys(transformers, key: str) -> list[str]:
+        ret = []
+        ninearray = cvt_to_ninearray(key)
+        for transformer in transformers:
+
+            output = ninearray.copy()
+            transformer.transform(ninearray, output)
+            if False:
+                print(f" transform named {transformer.get_name()} {ninearray}")
+                print(f"                     {output}") 
+            outputstring = cvt_ninearray_to_key(output)
+            ret.append(outputstring)
+            
+        return ret
+    
+    with open(infilename, "r") as input:
+        original = input.readlines()
+        original = [line.strip() for line in original]
+    print(f"Number of lines in original {len(original)}")
+    ninesym = NineSymmetry()
+    transforms = ninesym.compute_all_unique_not_identity().values()
+    if False:
+        print(f"Number of transforms={len(transforms)}")
+        print(transforms)
+
+    header = original.pop(0)
+    uniquestring2line = dict()
+    for line in original:
+        key = cvt_line_to_key(line)
+        uniquestring2line[key] = line
+        #print(f"key {key} to {line}")
+    ninearrays = [cvt_to_ninearray(line) for line in original]
+    #  print(f" nine[0][0]={ninearrays[0][0]}")   # prints  "b"
+    keep_lines = []
+    seen_keys = set()
+    key_list = list(uniquestring2line.keys())
+    print(f"  sample key ({key_list[0]})")
+    for key in key_list:
+        print(f" number of keys={len(uniquestring2line.keys())}")
+        if key in uniquestring2line:
+            if not key in seen_keys:
+                seen_keys.add(key)
+            # now remove all of the symmetry-identical keys
+            symmetric_keys = generate_symmetric_keys(transforms, key)
+            print(f" number symmetric_keys={len(symmetric_keys)}")
+            for delete_key in symmetric_keys:
+                print(f" checking delete_key ({delete_key})")
+                if delete_key in uniquestring2line.keys():
+                    removed = uniquestring2line.pop(delete_key, None)
+                    if removed == None:
+                        raise Exception(f"programmer error delete_key={delete_key}")
+                    else:
+                        print(f"success removing key {delete_key}")
+
+    with open(outfilename, "w") as outfile:
+        outfile.write(header + "\n")
+        for key in key_list:
+            if key in uniquestring2line.keys():
+                outfile.write(uniquestring2line[key] + "\n")
+                    
     return None
 
        
@@ -764,6 +864,6 @@ if __name__ == '__main__':
         with open("ttt-endgame.csv", "w") as outfile:
             write_all_games(all_games, outfile)
     if True:
-        create_all_symmetry(None)
+        remove_all_duplicates("ttt-endgame.csv", "ttt-endgame-unique.csv")
         
             
