@@ -27,7 +27,7 @@ Table of contents
 
  * [ml-style-transfer](https://github.com/timtiemens/ml-style-transfer) Implementation of Neural Style Transfer that allows easy hyperparameter experimentation.
    * [ml-style-transfer-samples](https://github.com/timtiemens/ml-style-transfer-samples) Some interesting outcomes from experiments with different styles, etc.
- * [tic-tac-toe dataset analysis](https://github.com/timtiemens/tictactoe) Analysis of the [Kaggle Tic-Tac-Toe End game Dataset] and code that shows how it was created and more.
+ * [tic-tac-toe](https://github.com/timtiemens/tictactoe) Analysis of the original [UCI Kaggle Tic-Tac-Toe End game Dataset] and code that shows how it was created and more.
  * [tic-tac-toe Kaggle dataset contribution](https://www.kaggle.com/datasets/ttiemens/tic-tac-toe-all-outcomes-and-turns?datasetId=3394123) packaged release of Tic Tac Toe complete Dataset to Kaggle.
 
 ## My External Links
@@ -40,6 +40,7 @@ Table of contents
 
  * [Kaggle, JSON, Python and pandas](http://tiemensfamily.com/timoncs/2023/03/17/kaggle-json-python-and-pandas/)
  * [Aha!](http://tiemensfamily.com/timoncs/2023/04/08/read-do-aha/)
+ * [compute_total_loss](http://tiemensfamily.com/timoncs/2023/05/02/compute_total_loss/)
  
 
 ## Courses and Certifications
