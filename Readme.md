@@ -61,7 +61,7 @@ Table of contents
  [[Certificate](https://coursera.org/share/67da5f33a46db1c531bcb0656e645735)]
 
 
-#### Deep Learning Specialization (in progress) [[Specialization home page](https://www.coursera.org/specializations/deep-learning)]  [Certificate TBD]
+#### &#9989;  Deep Learning Specialization (2023 Jul) [[Specialization home page](https://www.coursera.org/specializations/deep-learning)]  [[Certificate](https://www.coursera.org/account/accomplishments/specialization/certificate/BQ2DWNSDR65P)]
 
 * &#9989; Neural Networks and Deep Learning
  [[Course home page](https://www.coursera.org/learn/neural-networks-deep-learning)]
@@ -79,9 +79,14 @@ Table of contents
  [[Course home page](https://www.coursera.org/learn/convolutional-neural-networks)]
  [[Certificate](https://coursera.org/share/32215c9bb3c4ba021d77387222afbe9f)]
 
-* &#10146; Sequence Models
+* &#9989; Sequence Models
  [[Course home page](https://www.coursera.org/learn/nlp-sequence-models)]
- [Certificate TBD]
+ [[Certificate](https://www.coursera.org/account/accomplishments/certificate/THB29HBVTQDA)]
 
+
+#### Minor Certifications
+ * &#9989; Deep Learning with PyTorch : Image Segmentation (2023 Jun)
+ [[Course home page](https://www.coursera.org/projects/deep-learning-with-pytorch-image-segmentation)]
+ [[Certificate](https://www.coursera.org/account/accomplishments/certificate/BEUM5ZY6X3DX)]
 
 [Kaggle Tic-Tac-Toe End game Dataset]:https://www.kaggle.com/datasets/aungpyaeap/tictactoe-endgame-dataset-uci
